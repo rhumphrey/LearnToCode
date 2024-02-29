@@ -9,4 +9,13 @@ def euclid(a, b)
   return a
 end
 
-puts euclid(34, 16)
+puts euclid(7, 16)
+
+def euclid_mod(a, b)
+  while b != 0
+    a, b = b, a % b
+  end
+  return a.abs
+end
+
+puts euclid_mod(7, 16)
