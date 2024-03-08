@@ -4,7 +4,7 @@ require 'csv'
 # Data comes from Best Ever Albums site - Uncut Top 100 80s Albums
 # Read the csv into a CSV::Table
 # Uncut100_80s.csv has the follwing headings Rank,Title,Band,Country,Year,Compilation,Live,YearRank,DecadeRank,OverallRank,RankScore,AvgRating,NumRatings,AlbumID,Notes
-table = CSV.read("Uncut100_80s.csv", headers: true)
+table = CSV.read("albums/Uncut100_80s.csv", headers: true)
 
 # Commented out code - prints the full list of album titles and bands in the original order in csv - on Rank
 # Loop over each row array
