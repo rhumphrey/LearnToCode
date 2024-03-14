@@ -1,4 +1,6 @@
-# This problem was asked by Amazon.
+# frozen_string_literal: true
+
+# This problem was asked by Amazon
 # Given a pivot x, and a list lst, partition the list into three parts.
 # •	The first part contains all elements in lst that are less than x
 # •	The second part contains all elements in lst that are equal to x
@@ -8,19 +10,19 @@
 
 # this method creates a hash of arrays
 # Define a method that takes a list and a pivot value as arguments
-def partition_hash(lst, x)
+def partition_hash(lst, pivot)
   # Use the group_by method to split the list into three parts
   lst.group_by do |n|
-    if n < x # Compare each element to the pivot value
-      :less                       # Return :less for elements less than x
-    elsif n == x
-      :equal                      # Return :equal for elements equal to x
+    if n < pivot # Compare each element to the pivot value
+      :less                       # Return :less for elements less than pivot
+    elsif n == pivot
+      :equal                      # Return :equal for elements equal to pivot
     else
-      :greater                    # Return :more for elements more than x
+      :greater                    # Return :more for elements more than pivot
     end
   end
 end
-  
+
 # Create a list of 10 numbers
 numbers = [9, 12, 3, 5, 14, 10, 10]
 
@@ -31,29 +33,23 @@ result = partition_hash(numbers, 5)
 print result
 puts
 
-# this methods creates an array of arrays
-def partition_array(lst, x)
-  # Initialize three empty arrays to store the elements in each part
-  less = []
-  equal = []
-  greater = []
-  
-  # Loop through each element in the list
-  lst.each do |elem|
-    # Compare the element with the pivot and append it to the corresponding array
-    if elem < x
-      less << elem
-    elsif elem == x
-      equal << elem
+# A variation of the above to using a hash and group_by to return an array
+# The || [] ensures that if there are no elements in one of the categories, it returns an empty array instead of nil.
+def partition_array(lst, pivot)
+  groups = lst.group_by do |elem|
+    if elem < pivot
+      :less
+    elsif elem == pivot
+      :equal
     else
-      greater << elem
+      :greater
     end
   end
-  # Return the concatenation of the three arrays
-  return [less] + [equal] + [greater]
+
+  [groups[:less] || [], groups[:equal] || [], groups[:greater] || []]
 end
 
-  # Create a list of 10 numbers
+# Create a list of 10 numbers
 numbers = [9, 12, 3, 5, 14, 10, 10]
 
 # Call the partition method with the list and a pivot value of 5
@@ -65,17 +61,17 @@ puts
 
 
 # a version just using built in .partition method
-def partition(lst, x)
-    # Use the built-in partition method
-    lst.partition { |n| n < x }
+def partition(lst, pivot)
+  # Use the built-in partition method
+  lst.partition { |n| n < pivot }
 end
-  
-  # Create a list of 10 numbers
-  numbers = [9, 12, 3, 5, 14, 10, 10]
-  
-  # Call the partition method with the list and a pivot value of 5
-  result = partition(numbers, 5)
-  
-  # Print the result
-  print result
-  puts
+
+# Create a list of 10 numbers
+numbers = [9, 12, 3, 5, 14, 10, 10]
+
+# Call the partition method with the list and a pivot value of 5
+result = partition(numbers, 5)
+
+# Print the result
+print result
+puts
