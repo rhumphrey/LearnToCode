@@ -364,7 +364,7 @@ euclid := method(a, b,
 euclid(60, 48) println // This will return 12
 
 // Algorithms – Euclid’s (Modulo Method)
-euclid_mod := method(a, b,
+euclidMod := method(a, b,
     while(b != 0,
         tempA := b
         tempB := a % b
@@ -373,19 +373,19 @@ euclid_mod := method(a, b,
     )
     a abs
 )
-euclid_mod(60, 48) println // This will return 12
+euclidMod(60, 48) println // This will return 12
 
 // Algorithms – Linear Search
-linear_search := method(array, value,
+linearSearch := method(array, value,
     array foreach(index, element,
         if(element == value, return index)
     )
     nil
 )
 myArray := list(1, 2, 3, 4, 5)
-linear_search(myArray, 3) println// This will return 2
+linearSearch(myArray, 3) println// This will return 2
 
-bubble_sort := method(array,
+bubbleSort := method(array,
     n := array size
     for(i, 1, n - 1, 
         for(j, 0, n - i - 1,
@@ -398,8 +398,7 @@ bubble_sort := method(array,
     )
     array
 )
-
 myArray := list(4, 2, 6, 3, 1, 5)
-bubble_sort(myArray) println        // This will return the sorted array [1, 2, 3, 4, 5, 6]
+bubbleSort(myArray) println        // This will return the sorted array [1, 2, 3, 4, 5, 6]
 
 "" println
