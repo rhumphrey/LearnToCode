@@ -1,4 +1,4 @@
-// Io is a pure object-oriented programming language inspired by Smalltalk, Self, Lua, Lisp, Act1, and NewtonScript. 
+// Io is a pure object-oriented programming language inspired by Smalltalk, Self, Lua, Lisp, Act, and NewtonScript. 
 // It’s known for its prototype-based object model, which eliminates the distinction between instances and classes. 
 // In Io, everything is an object, and it uses dynamic typing. Programs are structured as trees of messages, similar to Lisp’s code-as-data philosophy. 
 // Io also features actor-based concurrency and a small, portable virtual machine.

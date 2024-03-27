@@ -1,0 +1,2 @@
+This is an example of writing to a .txt file.
+You can add more lines as needed.
