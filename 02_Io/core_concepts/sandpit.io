@@ -347,6 +347,8 @@ name := File standardInput readLine
 name := File standardInput readLine
 write("Hello, " .. name .. "!")
 
+"" println
+
 name type println
 
 "" println
