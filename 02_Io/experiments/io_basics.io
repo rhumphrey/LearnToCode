@@ -1,3 +1,4 @@
+// heading method
 heading := method(title, do(
     (title size) repeat("-" print)
     "" println
