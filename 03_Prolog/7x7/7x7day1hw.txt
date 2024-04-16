@@ -1,0 +1,37 @@
+Day 1 - Self-Study (Homework)
+Find:
+- Some free Prolog tutorials - https://www.let.rug.nl/bos/lpn//lpnpage.php?pageid=online 
+                             - https://book.simply-logical.space/src/simply-logical.html
+- A support forum (there are several) - https://swi-prolog.discourse.group/
+- One online reference for the Prolog version you’re using - https://www.swi-prolog.org/pldoc/man?section=quickstart 
+                                                           - https://www.swi-prolog.org/pldoc/doc_for?object=manual
+Do:
+- 1. Make a simple knowledge base. Represent some of your favorite books and authors.
+- 2. Find all books in your knowledge base written by one author.
+- 3. Make a knowledge base representing musicians and instruments. Also represent musicians and their genre of music.
+- 4. Find all musicians who play the guitar.
+
+
+1. Make a simple knowledge base. Represent some of your favorite books and authors.
+[facts and rules] = books.pl 
+
+
+2. Find all books in your knowledge base written by one author.
+[queries]   books_by_author(jrr_tolkien, Book).         =>  Book = the_hobbit  ; =>  Book = the_lord_of_the_rings.
+            books_by_author(george_rr_martin, Book).    =>  Book = a_game_of_thrones  ; =>  Book = a_clash_of_kings.
+            books_by_author(judith_cooper, Book).       =>  Book = the_witchs_daughter.
+            books_by_author(alan_garner, Book).         =>  Book = the_weirdstone_of_brisingamen ; => Book = the_moon_of_gomrath.
+
+
+3. Make a knowledge base representing musicians and instruments. Also represent musicians and their genre of music.
+[facts and rules] = mandi.pl
+
+
+4. Find all musicians who play the guitar.
+[queries]   musicians_by_instrument(guitar, Musician)  =>   Musician = jeff_beck 
+                                                    ;  =>   Musician = gary_moore 
+                                                    ;  =>   Musician = micheal_schenker 
+                                                    ;  =>   Musician = marty_friedman 
+                                                    ;  =>   Musician = johnny_marr 
+                                                    ;  =>   Musician = brian_robertson 
+                                                    ;  =>   Musician = steve_jones.
