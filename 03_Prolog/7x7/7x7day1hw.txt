@@ -2,6 +2,7 @@ Day 1 - Self-Study (Homework)
 Find:
 - Some free Prolog tutorials - https://www.let.rug.nl/bos/lpn//lpnpage.php?pageid=online 
                              - https://book.simply-logical.space/src/simply-logical.html
+                             - https://www.metalevel.at/prolog
                              - https://www.tutorialspoint.com/prolog/index.htm                             - 
 - A support forum (there are several) - https://swi-prolog.discourse.group/
                                       - https://swi-prolog.discourse.group/t/useful-prolog-references/1089
