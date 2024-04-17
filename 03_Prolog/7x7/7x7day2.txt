@@ -1,1 +1,70 @@
 Day 2 - Experiments
+In the following exercises => indicates what is returned by the query in Prolog. 
+; is typed in by the user to find the next result of the query (if there is one).
+
+
+Experiment 1 - Recursion
+[facts and rules] = family.pl 
+[queries]   ancestor(john_boy_sr, john_boy_jr). =>  true                ; =>    false.
+            ancestor(zeb, john_boy_jr).         =>  true                ; =>    false.
+            ancestor(zeb, Who).                 =>  Who = john_boy_sr   ; =>    Who = john_boy_jr   ; =>    false.
+            ancestor(Who, john_boy_jr).         =>  Who = john_boy_sr   ; =>    Who = zeb           ; =>    false.
+            ancestor(Who, ted).                 =>  false.
+
+
+Experiment 2 - Lists () and Tuples [] - Unification, Part 2
+[facts and rules] = none (no knowledge base loaded)
+[queries]   (1, 2, 3) = (1, 2, 3).              =>  true.
+            (1, 2, 3) = (1, 2, 3, 4).           =>  false.
+            (1, 2, 3) = (3, 2, 1).              =>  false.
+            (A, B, C) = (1, 2, 3).              =>  A = 1,  B = 2,  C = 3.
+            (1, 2, 3) = (A, B, C).              =>  A = 1,  B = 2,  C = 3.
+            (A, 2, C) = (1, B, 3).              =>  A = 1,  C = 3,  B = 2.
+            [1, 2, 3] = [1, 2, 3].              =>  true.
+            [1, 2, 3] = [X, Y, Z].              =>  X = 1,  Y = 2,  Z = 3.
+            [2, 2, 3] = [X, X, Z].              =>  X = 2,  Z = 3.  
+            [1, 2, 3] = [X, X, Z].              =>  false.
+            [] = [].                            =>  true.
+            [a, b, c] = [Head|Tail].            =>  Head = a,  Tail = [b, c].
+            [] = [Head|Tail].                   =>  false.
+            [a] = [Head|Tail].                  =>  Head = a,  Tail = [].
+            [a, b, c] = [a|Tail].               =>  Tail = [b, c].
+            [a, b, c] = [a|[Head|Tail]].        =>  Head = b,  Tail = [c].
+            [a, b, c, d, e] = [_, _|[Head|_]].  =>  Head = c.
+
+
+Experiment 3 - Lists and Math
+[facts and rules] =  list_math.pl
+[queries]   count(What, [1]).                   =>  What = 1.
+            sum(What, [1, 2, 3]).               =>  What = 6.
+            average(What, [1, 2, 3]).           =>  What = 2.
+
+
+Experiment 4a - Using Rules in Both Directions (a)
+[facts and rules] = none (no knowledge base loaded)
+[queries]   append([oil], [water], [oil, water]).                           =>  true.
+            append([oil], [water], [oil, slick]).                           =>  false.
+            append([tiny], [bubbles], What).                                =>  What = [tiny, bubbles].
+            append([dessert_topping], Who, [dessert_topping, floor_wax]).   =>  Who = [floor_wax].
+            append(One, Two, [apples, oranges, bananas]).                   =>  One = [],  Two = [apples, oranges, bananas] 
+                                                                        ;   =>  One = [apples],  Two = [oranges, bananas] 
+                                                                        ;   =>  One = [apples, oranges],  Two = [bananas] 
+                                                                        ;   =>  One = [apples, oranges, bananas], Two = [] 
+                                                                        ;   =>  false.
+
+Experiment 4b - Using Rules in Both Directions (b)
+[facts and rules] = concat_step_1.pl
+[queries]   concatenate([], [gahan], What).                         =>  What = [gahan].
+
+Experiment 4c - Using Rules in Both Directions (c)
+[facts and rules] = concat_step_2.pl
+[queries]   concatenate([gore], [gahan], What).                     =>  What = [gore, gahan].
+
+Experiment 4d - Using Rules in Both Directions (d)
+[facts and rules] =  concat_step_3.pl
+[queries]   concatenate([gore, fletcher], [gahan], What).           =>  What = [gore, fletcher, gahan]  ; =>    false.
+
+Experiment 4e - Using Rules in Both Directions (e)
+[facts and rules] =  concat.pl
+[queries]   concatenate([1, 2], [3], What).                         =>  What = [1, 2, 3].
+            concatenate([gore, fletcher, gahan], [wilder], What).   =>  What = [gore, fletcher, gahan, wilder].
