@@ -6,6 +6,7 @@ Find:
                              - https://www.tutorialspoint.com/prolog/index.htm                             - 
 - A support forum (there are several) - https://swi-prolog.discourse.group/
                                       - https://swi-prolog.discourse.group/t/useful-prolog-references/1089
+                                      - https://www.softwarepreservation.org/projects/prolog/
 - One online reference for the Prolog version you’re using - https://www.swi-prolog.org/pldoc/man?section=quickstart 
                                                            - https://www.swi-prolog.org/pldoc/doc_for?object=manual
 Do:
