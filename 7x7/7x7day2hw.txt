@@ -1,0 +1,39 @@
+Day 2 - Self-Study (Homework)
+Find: 
+- Some implementations of a Fibonacci series and factorials. How do they work? - https://swish.swi-prolog.org/p/tabing2.swinb
+                                                                               - https://eu.swi-prolog.org/pldoc/man?section=clpfd-factorial
+- A real-world community using Prolog. What problems are they solving with it today? - https://www.sfu.ca/~tjd/383summer2019/prolog_intro.html
+If you’re looking for something more advanced to sink your teeth into, try these problems:
+- An implementation of the Towers of Hanoi. How does it work? - https://www.tutorialspoint.com/prolog/prolog_towers_of_hanoi_problem.htm
+- What are some of the problems of dealing with “not” expressions? Why do you have to be careful with negation in Prolog? 
+    - https://en.wikibooks.org/wiki/Prolog/Cuts_and_Negation#Negation
+    - https://www.educba.com/prolog-not/
+    - https://cliplab.org/~vocal/public_info/seminar_notes/node52.html
+    - https://stackoverflow.com/questions/8523608/what-is-the-logical-not-in-prolog
+    - "To handle negation carefully in Prolog, it’s often recommended to use the \+ operator instead of not, 
+       as \+ is the ISO standard for negation in Prolog and conveys the idea of “not provable” more clearly. 
+       Additionally, using predicates like dif/2 can provide a more declarative way of expressing inequalities that behave 
+       consistently with the logical expectations.
+       Remember, when using negation in Prolog, always consider the context and the specific behavior of the predicates 
+       involved to avoid logical errors and unexpected behaviors." 
+
+
+Do:
+1. Reverse the elements of a list.
+2. Find the smallest element of a list.
+3. Sort the elements of a list.
+
+
+1. Reverse the elements of a list.
+[facts and rules] = reverse.pl
+[queries]   reverse_list([a, b, c, d], What).       =>  What = [d, c, b, a].
+
+
+2. Find the smallest element of a list.
+[facts and rules] = smallest.pl
+[queries]   smallest([5, 3, 6, 2, 7], What).        =>  What = 2                ; =>    false.
+
+
+3. Sort the elements of a list.
+[facts and rules] = sort.pl
+[queries]   insertion_sort([7, 4, 3, 8], What).     =>  What = [3, 4, 7, 8]     ; =>    false.

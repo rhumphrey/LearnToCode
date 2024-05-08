@@ -1,0 +1,68 @@
+Day 3 - Experiments
+In the following exercises => indicates what is returned by the query in Prolog. 
+; is typed in by the user to find the next result of the query (if there is one).
+
+Experiment 1a - Solving Sudoku - Step 1
+[facts and rules] = sudoku4_step_1.pl
+[queries]   sudoku([4, 1, 2, 3,
+                    2, 3, 4, 1,
+                    1, 2, 3, 4,
+                    3, 4, 1, 2], Solution).
+            =>      Solution = [4, 1, 2, 3, 2, 3, 4, 1, 1|...].
+            sudoku([1, 2, 3], Solution).
+            =>      Solution = [1, 2, 3].
+            sudoku([1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6], Solution).
+            =>      Solution = [1, 2, 3, 4, 5, 6, 7, 8, 9|...].
+
+
+Experiment 1b - Solving Sudoku - Step 2
+[facts and rules] = sudoku4_step_2.pl
+[queries]   sudoku([1, 2, 3], Solution).
+            =>      false.
+            sudoku([1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6], Solution).
+            =>      false.
+            sudoku([4, 1, 2, 3,
+                    2, 3, 4, 1,
+                    1, 2, 3, 4,
+                    3, 4, 1, 2], Solution).
+            =>      Solution = [4, 1, 2, 3, 2, 3, 4, 1, 1|...].
+            ;   =>  false.
+
+
+Experiment 1c - Solving Sudoku - Step 3 - Final 
+[facts and rules] = sudoku4.pl
+[queries]   sudoku([_, _, 2, 3,
+                    _, _, _, _,
+                    _, _, _, _,
+                    3, 4, _, _],
+                    Solution).
+            =>      Solution = [4, 1, 2, 3, 2, 3, 4, 1, 1|...]
+            ;   =>  false.
+
+
+Experiment 2a - Eight Queens
+[facts and rules] = queens.pl
+[queries]   eight_queens([(1, A), (2, B), (3, C), (4, D), (5, E), (6, F), (7, G), (8, H)]).
+            =>      A = 1,
+                    B = 5,
+                    C = 8,
+                    D = 6,
+                    E = 3,
+                    F = 7,
+                    G = 2,
+                    H = 4 
+            ;   =>  Note: for each ; entered you will get the next solution
+
+
+Experiment 2b - Eight Queens - Optimized
+[facts and rules] = optimized_queens.pl
+[queries]   eight_queens([(1, A), (2, B), (3, C), (4, D), (5, E), (6, F), (7, G), (8, H)]).
+            =>      A = 1,
+                    B = 5,
+                    C = 8,
+                    D = 6,
+                    E = 3,
+                    F = 7,
+                    G = 2,
+                    H = 4 
+            ;   =>  Note: for each ; entered you will get the next solution
