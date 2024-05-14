@@ -1,0 +1,233 @@
+Day 1 - Experiments
+// Note: in some of the code example files referenced I have changed some of the Object and Class names to enable
+// the code to run correctly in the environment on my system
+// Additionally I have also had to refactor code from the original form given in the book, however the
+// examples given for the scala console (REPL) work fine although the 'replies' differ in some cases.
+
+// Types
+At command prompt type scala
+Then try the following in the scala console (I've included the scala console response below the entry)
+
+scala> println("Hello, surreal world")
+Hello, surreal world
+
+scala> 1 + 1
+val res6: Int = 2
+
+scala> (1).+(1)
+val res7: Int = 2
+
+scala> 5 + 4 * 3
+val res8: Int = 17
+
+scala> 5.+(4.*(3))
+val res9: Int = 17
+
+scala> 5.0+(4.*(3))
+val res10: Double = 17.0
+
+scala> (5).+((4).*(3))
+val res11: Int = 17
+
+scala> "abc".size
+val res12: Int = 3
+
+scala> "abc" + 4
+val res13: String = abc4
+
+scala> 4 + "abc"
+there was 1 deprecation warning; re-run with -deprecation for details
+1 warning found
+val res14: String = 4abc
+
+scala> 4 + "1.0"
+there was 1 deprecation warning; re-run with -deprecation for details
+1 warning found
+val res16: String = 41.0
+
+scala> 4 * "abc"
+-- [E134] Type Error: ----------------------------------------------------------
+1 |4 * "abc"
+  |^^^
+  |None of the overloaded alternatives of method * in class Int with types
+  | (x: Double): Double
+  | (x: Float): Float
+  | (x: Long): Long
+  | (x: Int): Int
+  | (x: Char): Int
+  | (x: Short): Int
+  | (x: Byte): Int
+  |match arguments (("abc" : String))
+1 error found
+
+
+// Expressions and Conditions
+
+scala> 5 < 6
+val res17: Boolean = true
+
+scala> 5 <= 6
+val res18: Boolean = true
+
+scala> 5 <= 2
+val res19: Boolean = false
+
+scala> 5 >= 2
+val res20: Boolean = true
+
+scala> 5 != 2
+val res21: Boolean = true
+
+scala> val a = 1
+val a: Int = 1
+
+scala> val b = 2
+val b: Int = 2
+
+scala> if ( b < a) {
+     | println("true")
+     | } else {
+     | println("false")
+     | }
+false
+
+scala> Nil
+val res23: scala.collection.immutable.Nil.type = List()
+
+scala> true
+val res24: Boolean = true
+
+scala> false
+val res25: Boolean = false
+
+scala> if(0) {println("true")}
+-- [E007] Type Mismatch Error: -------------------------------------------------
+1 |if(0) {println("true")}
+  |   ^
+  |   Found:    (0 : Int)
+  |   Required: Boolean
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found
+
+scala> if(Nil) {println("true")}
+-- [E007] Type Mismatch Error: -------------------------------------------------
+1 |if(Nil) {println("true")}
+  |   ^^^
+  |   Found:    (Nil : scala.collection.immutable.Nil².type)
+  |   Required: Boolean
+  |
+  |   where:    Nil  is a value in package object scala
+  |             Nil² is a object in package scala.collection.immutable
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found
+
+scala> if(false) {println("true")}
+
+scala> if(true) {println("true")}
+true
+
+// Loops
+
+The following are run at the o/s comand prompt and the files are in the _learntocode_\04_Scala\7x7 folder
+
+scala while.scala
+scala for_loop.scala its all in the grind
+ruby_for_loop.scala freeze those knees chickadees
+
+// Ranges and Tuples 
+At command prompt type scala
+Then try the following in the scala console (I've included the scala console response below the entry)
+
+scala> val range = 0 until 10
+val range: Range = Range 0 until 10
+
+scala> range.start
+val res0: Int = 0
+
+scala> range.end
+val res1: Int = 10
+
+scala> range.step
+val res2: Int = 1
+
+scala> (0 to 10) by 5
+val res3: Range = Range 0 to 10 by 5
+
+scala> (0 to 10) by 6
+val res4: Range = inexact Range 0 to 10 by 6
+
+scala> (0 until 10 by 5)
+val res5: Range = Range 0 until 10 by 5
+
+scala> val range = (10 until 0) by -1
+val range: Range = Range 10 until 0 by -1
+
+scala> val range = (10 until 0)
+val range: Range = empty Range 10 until 0
+
+scala> val range = (0 to 10)
+val range: scala.collection.immutable.Range.Inclusive = Range 0 to 10
+
+scala> val range = 'a' to 'e'
+val range: scala.collection.immutable.NumericRange.Inclusive[Char] = NumericRange a to e
+
+scala> val person = ("Elvis", "Presley")
+val person: (String, String) = (Elvis,Presley)
+
+scala> person._1
+val res6: String = Elvis
+
+scala> person._2
+val res7: String = Presley
+
+scala> person._3
+-- [E008] Not Found Error: -----------------------------------------------------
+1 |person._3
+  |^^^^^^^^^
+  |value _3 is not a member of (String, String) - did you mean person._1? or perhaps person._1 or person._2 or person._2?
+1 error found
+
+scala> val (x, y) = (1, 2)
+val x: Int = 1
+val y: Int = 2
+
+scala> val (a, b) = (1, 2, 3)
+-- Warning: --------------------------------------------------------------------
+1 |val (a, b) = (1, 2, 3)
+  |             ^^^^^^^^^
+  |pattern's type (Any, Any) does not match the right hand side expression's type (Int, Int, Int)
+  |
+  |If the narrowing is intentional, this can be communicated by adding `: @unchecked` after the expression,
+  |which may result in a MatchError at runtime.
+-- Error: ----------------------------------------------------------------------
+1 |val (a, b) = (1, 2, 3)
+  |    ^
+  |this case is unreachable since type (Int, Int, Int) is not a subclass of class Tuple2
+1 warning found
+1 error found
+
+// Classes in Scala
+
+scala> class Person(firstName: String, lastName: String)
+// defined class Person
+
+scala> val gump = new Person("Forrest", "Gump")
+val gump: Person = Person@2265a052
+
+The following are run at the o/s comand prompt and the files are in the _learntocode_\04_Scala\7x7 folder
+scala CompassApp.scala
+
+// Auxiliary Constructors
+scala constructor.scala
+
+// Extending Classes
+// Companion Objects and Class Methods
+scala ring.scala
+
+// Inheritance
+scala employee.scala
+
+// Traits
+scala nice.scala
