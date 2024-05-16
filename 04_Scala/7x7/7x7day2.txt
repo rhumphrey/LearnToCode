@@ -1,0 +1,329 @@
+Day 2 - Experiments
+// Note: in some of the code examples below you will see some errors due to depricated language elements
+// most of these are noted in the book but you might want to invoke scala with the --deprecation argument
+// to gain more insight
+
+// Functions
+scala> def double(x:Int):Int = x * 2
+def double(x: Int): Int
+
+scala> double(4)
+val res0: Int = 8
+
+scala> def double(x:Int):Int = {
+     |  x * 2
+     | }
+def double(x: Int): Int
+
+scala> double(6)
+val res1: Int = 12
+
+// Var vs. val
+scala> var mutable = "I am mutable"
+var mutable: String = I am mutable
+
+scala> mutable = "Touch me, change me..."
+mutable: String = Touch me, change me...
+
+scala> val immutable = "I am not mutable"
+val immutable: String = I am not mutable
+
+scala> immutable = "Can't touch this"
+-- [E052] Type Error: ----------------------------------------------------------
+1 |immutable = "Can't touch this"
+  |^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |Reassignment to val immutable
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found
+
+// Collections
+// Lists
+
+scala> List(1, 2, 3)
+val res2: List[Int] = List(1, 2, 3)
+
+scala> List("one", "two", "three")
+val res3: List[String] = List(one, two, three)
+
+scala> List("one", "two", 3)
+val res4: List[String | Int] = List(one, two, 3)
+
+scala> List("one", "two", 3)(2)
+val res5: String | Int = 3
+
+scala> List("one", "two", 3)(4)
+java.lang.IndexOutOfBoundsException: 4
+  at scala.collection.LinearSeqOps.apply(LinearSeq.scala:131)
+  at scala.collection.LinearSeqOps.apply$(LinearSeq.scala:128)
+  at scala.collection.immutable.List.apply(List.scala:79)
+  ... 41 elided
+
+scala> List("one", "two", 3)(-1)
+java.lang.IndexOutOfBoundsException: -1
+  at scala.collection.LinearSeqOps.apply(LinearSeq.scala:129)
+  at scala.collection.LinearSeqOps.apply$(LinearSeq.scala:128)
+  at scala.collection.immutable.List.apply(List.scala:79)
+  ... 41 elided
+
+scala> List("one", "two", 3)(-2)
+java.lang.IndexOutOfBoundsException: -2
+  at scala.collection.LinearSeqOps.apply(LinearSeq.scala:129)
+  at scala.collection.LinearSeqOps.apply$(LinearSeq.scala:128)
+  at scala.collection.immutable.List.apply(List.scala:79)
+  ... 41 elided
+
+scala> List("one", "two", 3)(-3)
+java.lang.IndexOutOfBoundsException: -3
+  at scala.collection.LinearSeqOps.apply(LinearSeq.scala:129)
+  at scala.collection.LinearSeqOps.apply$(LinearSeq.scala:128)
+  at scala.collection.immutable.List.apply(List.scala:79)
+  ... 41 elided
+
+scala> Nil
+val res10: scala.collection.immutable.Nil.type = List()
+
+// Sets
+
+scala> val animals = Set("lions", "tigers", "bears")
+val animals: Set[String] = Set(lions, tigers, bears)
+
+scala> animals + "armadillos"
+val res11: Set[String] = Set(lions, tigers, bears, armadillos)
+
+scala> animals - "tigers"
+val res12: Set[String] = Set(lions, bears)
+
+scala> animals + Set("armadillos", "raccoons")
+-- [E007] Type Mismatch Error: -------------------------------------------------
+1 |animals + Set("armadillos", "raccoons")
+  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |          Found:    Set[String]
+  |          Required: String
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found
+
+scala> animals ++ Set("armadillos", "raccoons")
+val res13: Set[String] = HashSet(bears, tigers, lions, armadillos, raccoons)
+
+scala> animals -- Set("lions", "bears")
+val res14: Set[String] = Set(tigers)
+
+scala> animals ** Set("armadillos", "raccoons", "lions", "tigers")
+-- [E008] Not Found Error: -----------------------------------------------------
+1 |animals ** Set("armadillos", "raccoons", "lions", "tigers")
+  |^^^^^^^^^^
+  |value ** is not a member of Set[String]
+1 error found
+
+scala> animals & Set("armadillos", "raccoons", "lions", "tigers")
+val res15: Set[String] = Set(lions, tigers)
+
+scala> Set(1, 2, 3) == Set(3, 2, 1)
+val res16: Boolean = true
+
+scala> List(1, 2, 3) == List(3, 2, 1)
+val res17: Boolean = false
+
+// Maps
+
+scala> val ordinals = Map(0 -> "zero", 1 -> "one", 2 -> "two")
+val ordinals: Map[Int, String] = Map(0 -> zero, 1 -> one, 2 -> two)
+
+scala> ordinals(2)
+val res18: String = two
+
+scala> import scala.collection.mutable.HashMap
+
+scala> val map = new HashMap[Int, String]
+val map: scala.collection.mutable.HashMap[Int, String] = HashMap()
+
+scala> map += 4 -> "four"
+val res19: scala.collection.mutable.HashMap[Int, String] = HashMap(4 -> four)
+
+scala> map += 8 -> "eight"
+val res20: scala.collection.mutable.HashMap[Int, String] = HashMap(4 -> four, 8 -> eight)
+
+scala> map
+val res21: scala.collection.mutable.HashMap[Int, String] = HashMap(4 -> four, 8 -> eight)
+
+scala> map += "zero" -> 0
+-- [E007] Type Mismatch Error: -------------------------------------------------
+1 |map += "zero" -> 0
+  |       ^^^^^^^^^^^
+  |       Found:    (String, Int)
+  |       Required: (Int, String)
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found
+
+// Any and Nothing
+"Any is the root class in the Scala class hierarchy. It’s often confusing, but know that any
+Scala type will inherit from Any. Similarly, Nothing is a subtype of every type. 
+That way, a function, say for a collection, can return Nothing and conform to the return value 
+for the given function. It is all laid out in Figure 5.1, on the next page.
+Everything inherits from Any, and Nothing inherits from everything.
+There are a few different nuances when you’re dealing with nil concepts.
+Null is a Trait, and null is an instance of it that works like Java’s null, 
+meaning an empty value. An empty collection is Nil. By contrast, Nothing
+is a trait that is a subtype of everything. Nothing has no instance, so
+you can’t dereference it like Null. For example, a method that throws an
+Exception has the return type Nothing, meaning no value at all.
+
+// Collections and Functions
+// foreach
+
+scala> val list = List("frodo", "samwise", "pippin")
+val list: List[String] = List(frodo, samwise, pippin)
+
+scala> list.foreach(hobbit => println(hobbit))
+frodo
+samwise
+pippin
+
+scala> val hobbits = Set("frodo", "samwise", "pippin")
+val hobbits: Set[String] = Set(frodo, samwise, pippin)
+
+scala> hobbits.foreach(hobbit => println(hobbit))
+frodo
+samwise
+pippin
+
+scala> val hobbits = Map("frodo" -> "hobbit",
+     | "samwise" -> "hobbit", "pippin" -> "hobbit")
+val hobbits: Map[String, String] = Map(frodo -> hobbit, samwise -> hobbit, pippin -> hobbit)
+
+scala> hobbits.foreach(hobbit => println(hobbit))
+(frodo,hobbit)
+(samwise,hobbit)
+(pippin,hobbit)
+
+scala> hobbits.foreach(hobbit => println(hobbit._1))
+frodo
+samwise
+pippin
+
+scala> hobbits.foreach(hobbit => println(hobbit._2))
+hobbit
+hobbit
+hobbit
+
+// More List Methods
+
+scala> list
+val res22: List[String] = List(frodo, samwise, pippin)
+
+scala> list.isEmpty
+val res23: Boolean = false
+
+scala> Nil.isEmpty
+val res24: Boolean = true
+
+scala> list.length
+val res25: Int = 3
+
+scala> list.size
+val res26: Int = 3
+
+scala> list.head
+val res27: String = frodo
+
+scala> list.tail
+val res28: List[String] = List(samwise, pippin)
+
+scala> list.last
+val res29: String = pippin
+
+scala> list.init
+val res30: List[String] = List(frodo, samwise)
+
+scala> list.reverse
+val res31: List[String] = List(pippin, samwise, frodo)
+
+scala> list.drop(1)
+val res32: List[String] = List(samwise, pippin)
+
+scala> list
+val res33: List[String] = List(frodo, samwise, pippin)
+
+scala> list.drop(2)
+val res34: List[String] = List(pippin)
+
+// count, map, filter, and Others
+
+scala> val words = List("peg", "al", "bud", "kelly")
+val words: List[String] = List(peg, al, bud, kelly)
+
+scala> words.count(word => word.size > 2)
+val res35: Int = 3
+
+scala> words.filter(word => word.size > 2)
+val res36: List[String] = List(peg, bud, kelly)
+
+scala> words.map(word => word.size)
+val res37: List[Int] = List(3, 2, 3, 5)
+
+scala> words.forall(word => word.size > 1)
+val res38: Boolean = true
+
+scala> words.exists(word => word.size > 4)
+val res39: Boolean = true
+
+scala> words.exists(word => word.size > 5)
+val res40: Boolean = false
+
+scala> words.sort((s, t) => s.charAt(0).toLowerCase < t.charAt(0).toLowerCase)
+-- [E008] Not Found Error: -----------------------------------------------------
+1 |words.sort((s, t) => s.charAt(0).toLowerCase < t.charAt(0).toLowerCase)
+  |^^^^^^^^^^
+  |value sort is not a member of List[String], but could be made available as an extension method.
+  |
+  |One of the following imports might fix the problem:
+  |
+  |  import scala.collection.convert.ImplicitConversions.seq AsJavaList 
+  |  import scala.collection.convert.ImplicitConversionsToJava.seq AsJavaList
+  |
+1 error found
+
+scala> words.sortWith((s, t) => s.charAt(0).toLower < t.charAt(0).toLower)
+val res41: List[String] = List(al, bud, kelly, peg)
+
+scala> words.sort((s, t) => s.size < t.size)
+-- [E008] Not Found Error: -----------------------------------------------------
+1 |words.sort((s, t) => s.size < t.size)
+  |^^^^^^^^^^
+  |value sort is not a member of List[String], but could be made available as an extension method.
+  |
+  |One of the following imports might fix the problem:
+  |
+  |  import scala.collection.convert.ImplicitConversions.seq AsJavaList 
+  |  import scala.collection.convert.ImplicitConversionsToJava.seq AsJavaList
+  |
+1 error found
+
+scala> words.sortWith((s, t) => s.size < t.size)
+val res42: List[String] = List(al, peg, bud, kelly)
+
+// foldLeft
+
+scala> val list = List(1, 2, 3)
+val list: List[Int] = List(1, 2, 3)
+
+scala> val sum = (0 /: list) {(sum, i) => sum + i}
+there was 1 deprecation warning; re-run with -deprecation for details
+1 warning found
+val sum: Int = 6
+
+val list = List(1, 2, 3)
+scala> list.foldLeft(0)((sum, value) => sum + value)
+val res43: Int = 6
+
+// with scala -deprecation
+scala> val sum = (0 /: list) {(sum, i) => sum + i}
+1 warning found
+-- Deprecation Warning: --------------------------------------------------------
+1 |val sum = (0 /: list) {(sum, i) => sum + i}
+  |             ^^^^^^^
+  |method /: in trait IterableOnceOps is deprecated since 2.13.0: Use foldLeft instead of /:
+val sum: Int = 6

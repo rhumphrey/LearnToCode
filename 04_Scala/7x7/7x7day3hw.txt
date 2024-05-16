@@ -1,0 +1,39 @@
+Day 3 - Self-Study (Homework)
+Find.
+- For the sizer program, what would happen if you did not create a
+new actor for each link you wanted to follow? What would happen
+to the performance of the application?
+In Scala 3 there are futures that can be used for concurrency
+So, for futures rather than actors :-
+If you did not create a new future for each link in the `Sizer` program, all the requests 
+to fetch the web pages would run sequentially on the main thread rather than concurrently. 
+This means that the program would wait for one web page to be completely fetched and 
+its size computed before moving on to the next one.
+
+The performance implications of this approach would be significant:
+- Increased Total Execution Time: The total time taken by the program to compute the 
+sizes of all web pages would be the sum of the times taken to fetch each page individually. 
+This could lead to a substantial increase in the total execution time, especially if 
+there are many URLs or if some of the web pages are slow to respond.
+- Underutilization of Resources: Modern computers have multiple cores that can perform operations in parallel. 
+By not using futures, the program would fail to take advantage of these parallel processing capabilities, 
+leading to underutilization of the available computational resources.
+- Poor User Experience: If the `Sizer` program is part of a larger application with a user interface, 
+running the tasks sequentially could result in a poor user experience due to the unresponsive nature of the 
+UI while the tasks are being executed.
+
+Do:
+1. Take the sizer application and add a message to count the number
+of links on the page.
+2. Bonus problem: Make the sizer follow the links on a given page,
+and load them as well. For example, a sizer for “google.com” would
+compute the size for Google and all of the pages it links to.
+
+1. Take the sizer application and add a message to count the number
+of links on the page.
+scala sizer_v2\sizer.scala
+
+2. Bonus problem: Make the sizer follow the links on a given page,
+and load them as well. For example, a sizer for “google.com” would
+compute the size for Google and all of the pages it links to.
+scala sizer_v3\sizer.scala

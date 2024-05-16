@@ -1,0 +1,36 @@
+Day 2 - Self-Study (Homework)
+Find:
+- A discussion on how to use Scala files
+    - https://reintech.io/blog/working-with-files-in-scala-tutorial
+    - https://alvinalexander.com/scala/how-to-open-read-text-files-in-scala-cookbook-examples/
+
+- What makes a closure different from a code block
+    - https://alvinalexander.com/scala/how-to-use-closures-in-scala-fp-examples/
+    - In Scala, a closure is a function that can capture the bindings of free variables in its 
+      lexical scope, which means it can use and even modify variables defined outside of its 
+      immediate function body. On the other hand, a code block is simply a grouping of statements 
+      enclosed in braces {} that can contain declarations, expressions, and other blocks, 
+      but it does not capture any free variables.
+      - Code Block: It’s a syntactic structure that groups statements together. 
+        For example, the body of a while statement is a code block. It allows for local scoping of 
+        variables, meaning variables declared within a block are not accessible outside of it.
+      - Closure: A closure is a special type of function that captures the state of the environment 
+        when it’s created. This means it can reference variables from its surrounding scope, 
+        even if they’re not passed as parameters. Closures are useful because they carry the context 
+        with them, allowing for more flexible and functional programming patterns.
+
+Do:
+1. Use foldLeft to compute the total size of a list of strings.
+2. Write a Censor trait with a method that will replace the curse words Shoot and Darn with Pucky and Beans alternatives. 
+   Use a map to store the curse words and their alternatives.
+3. Load the curse words and alternatives from a file.
+
+
+1. Use foldLeft to compute the total size of a list of strings.
+   scala size_of_list.scala 
+
+2. Write a Censor trait with a method that will replace the curse words 
+   Shoot and Darn with Pucky and Beans alternatives. Use a map to store the curse words and their alternatives.
+   scala censor.scala 
+
+3. Load the curse words and alternatives from a file.

@@ -1,0 +1,19 @@
+Day 1 - Self-Study (Homework)
+Find:
+- The Scala API                     - https://docs.scala-lang.org/api/all.html
+- A comparison of Java and Scala    - https://www.geeksforgeeks.org/scala-vs-java/
+- A discussion of val versus var    - https://sparkbyexamples.com/scala/what-is-the-difference-between-a-var-and-val-in-scala/
+
+Do:
+1. Write a game that will take a tic-tac-toe board with X, O, and blank characters and detect the 
+   winner or whether there is a tie or no winner yet. Use classes where appropriate.
+2. Bonus problem: Let two players play tic-tac-toe.
+
+1. Write a game that will take a tic-tac-toe board with X, O, and blank characters and detect the 
+   winner or whether there is a tie or no winner yet. Use classes where appropriate.
+   
+   scala tictactoe.scala 
+
+2. Bonus problem: Let two players play tic-tac-toe.
+   
+   scala tttbonus\tttbonus.scala  

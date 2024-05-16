@@ -1,0 +1,60 @@
+Day 3 - Experiments
+// Note: in some of the code examples below you might see some errors due to depricated language elements
+// most of these are noted in the book but you might want to invoke scala with the --deprecation argument
+// to gain more insight. Ive also mdified  the .scala code as needed to run in Scala 3
+
+// XML
+I read through this section in the book as the way this works at the REPL
+now requires additional libraries to be loaded:
+"Starting from Scala 2.11, the XML library is not included by default and 
+needs to be added as a separate dependency."
+I'll probably revist this in a latter week of study to see how this works
+in more of a production environment as I would not be using something like
+this in the REPL.
+
+// Pattern Matching
+scala chores.scala
+
+// Guards
+scala factorial.scala
+
+// Regular Expressions
+scala> val reg = """^(F|f)\w*""".r
+val reg: scala.util.matching.Regex = ^(F|f)\w*
+
+scala> println(reg.findFirstIn("Fantastic"))
+Some(Fantastic)
+
+scala> println(reg.findFirstIn("not Fantastic"))
+None
+
+scala> val reg = "the".r
+val reg: scala.util.matching.Regex = the
+
+scala> reg.findAllIn("the way the scissors trim the hair and the shrubs")
+val res0: scala.util.matching.Regex.MatchIterator = <iterator>
+
+//XML with Matching
+The following is required in the build.sbt file for working with xml
+libraryDependencies += "org.scala-lang.modules" %% "scala-xml" % "2.0.1"
+scala movies.scala
+
+// Concurrency
+I've opted to not include files for this as the way Scala 3 handles concurrency is quite different syntactically than the
+way the Seven Languages In Seven Weeks covers it.
+I've included a Scala 3 file futures.scala in the folder that shows how concurrency can be done using futures
+
+In this example, longRunningTask is a method that returns a Future[Int]. 
+It simulates a task that takes some time to complete using Thread.sleep(1000). 
+The Future is executed asynchronously, and the onComplete method is used to handle 
+the result once it’s available. The println statement after the future is created 
+will execute immediately, demonstrating the non-blocking nature of futures.
+
+Remember, when working with Futures, it’s important to have an implicit ExecutionContext in scope, 
+which is provided by ExecutionContext.Implicits.global in this example. 
+This execution context is responsible for executing the computations encapsulated by Futures.
+
+// Concurrency in Action (but using Futures)
+scala sizer.scala
+
+
