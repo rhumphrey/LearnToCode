@@ -1,18 +1,17 @@
-import scala.util.matching.Regex
-
 // Define the main method at the top level
 @main def run(): Unit =
-  import scala.io.Source
+  // You can assign the result to a variable
+  val a = 2
+  val b = 3
+  val minValue = if a < b then a else b
 
-  // Open the file
-  val filename = "example.txt"
-  val bufferedSource = Source.fromFile(filename)
-
-  // Read the file line by line
-  for (line <- bufferedSource.getLines)
-    println(line)
+  // You can also use them as method bodies 
+  def compare(a: Int, b: Int): Int = 
+    if a < b then -1 else if a == b then 0 else 1
 
 
-  // Don't forget to close the source
-  bufferedSource.close()
+
+
+
+
 

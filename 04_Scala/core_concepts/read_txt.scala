@@ -1,7 +1,7 @@
 import scala.io.Source
 
 
-@main def run(): Unit = {
+@main def read(): Unit = {
 
 // Open the file
 val filename = "example.txt"

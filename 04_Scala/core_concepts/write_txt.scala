@@ -1,6 +1,6 @@
 import java.io._
 
-@main def run(): Unit = {
+@main def write(): Unit = {
 
     // Using PrintWriter
     val pw = new PrintWriter(new File("example.txt"))
