@@ -308,7 +308,7 @@
 
   // multi line while loop
   var x1 = 1
-  while (x1 < 3)
+  while (x1 < 5)
     println(x1)
     x1 += 1
 
