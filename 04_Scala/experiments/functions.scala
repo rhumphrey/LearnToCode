@@ -1,4 +1,5 @@
 // Based on examples from https://docs.scala-lang.org/scala3/book/taste-functions.html
+//                        https://docs.scala-lang.org/scala3/book/fun-anonymous-functions.html
 @main def functions() =
   // The map method of the List class is a typical example of a higher-order function—a function that takes a function as parameter.
   val a = List(1, 2, 3).map(i => i * 2)     // uses an explicit lambda expression as the mapping operation - i => i * 2 takes an integer i and multiplies it by 2.
@@ -28,3 +29,47 @@
 
   // result: x == List(40, 50, 60)
   println(x)
+
+
+  // Anonymous function
+  val ints = List(1, 2, 3)
+  val doubledInts = ints.map(_ * 2)   // List(2, 4, 6)
+  println(doubledInts)
+
+  /* 
+  These forms are also valid
+  val doubledInts = ints.map((i: Int) => i * 2)
+  val doubledInts = ints.map((i) => i * 2)
+  val doubledInts = ints.map(i => i * 2)
+  val doubledInts = ints.map(_ * 2)
+  */
+
+  // for this anonymous function example below
+  ints.foreach((i: Int) => println(i))
+
+  /* 
+  These forms are also valid
+  ints.foreach(i => println(i))
+  ints.foreach(println(_))
+  ints.foreach(println)
+   */
+
+  // Function variables
+  val doubleit = (i: Int) => i * 2
+  val x1 = doubleit(2)
+  println(x1)
+  // The function variable can also be passed to a list
+  val l = List(1, 2, 3).map(doubleit) 
+  println(l)
+ 
+   // When you have other functions of the Int => Int type
+  val tripleit = (i: Int) => i * 3
+  // you can store them in a List or Map
+  val functionList = List(doubleit, tripleit)
+  val functionMap = Map(
+    "2x" -> doubleit,
+    "3x" -> tripleit
+  )
+
+
+

@@ -1,4 +1,5 @@
 // Based on examples from https://docs.scala-lang.org/scala3/book/taste-methods.html
+//                        https://docs.scala-lang.org/scala3/book/methods-most.html
 @main def methods() =
   /* 
   The basic syntax of a methods
@@ -21,7 +22,7 @@
   println(s"If you have the strings $firstString and $secondString then the whole string is $theWholeString")
 
   /* 
-  You don’t have to declare a method’s return type, so you can write those methods like this
+  You don’t have to declare a method’s return type (but it's advised), so you can write those methods like this
   def sum(a: Int, b: Int) = a + b
   def concatenate(s1: String, s2: String) = s1 + s2
    */
@@ -83,3 +84,129 @@
   println("1".makeInt(2))      // Int = 1
   println("10".makeInt(2))     // Int = 2
   println("100".makeInt(2))    // Int = 4
+
+  /* 
+  Methods that take no parameters
+  When a method takes no parameters, it’s said to have an arity level of arity-0. 
+  Similarly, when a method takes one parameter it’s an arity-1 method. When you create arity-0 methods:
+  - If the method performs side effects, such as calling println, declare the method with empty parentheses
+  - If the method does not perform side effects—such as getting the size of a collection, 
+    which is similar to accessing a field on the collection—leave the parentheses off
+   */
+
+  // Using if as a method body
+  def isTruthy(a: Any) =
+  if a == 0 || a == "" || a == false then
+    false
+  else
+    true
+
+  // In use
+  println(isTruthy(0))
+  println(isTruthy(""))     
+  println(isTruthy("hi"))   
+  println(isTruthy(1.0))    
+
+  // Using match as a method body
+  def isTruthyCase(a: Matchable) = a match
+  case 0 | "" | false => false
+  case _ => true
+
+  // In use
+  println(isTruthyCase(0))
+  println(isTruthyCase(""))     
+  println(isTruthyCase("hi"))   
+  println(isTruthyCase(1.0)) 
+
+  // Controlling visibility in classes
+  // In classes, objects, traits, and enums, Scala methods are public by default
+  class Dog:
+    def speak() = println("Woof")
+
+  val d = new Dog
+  d.speak() 
+
+  // Methods can also be marked as private. 
+  // This makes them private to the current class, so they can’t be called nor overridden in subclasses
+  class Animal:
+    private def breathe() = println("I'm breathing")
+
+  class Cat extends Animal:
+    // this method won’t compile
+    // override def breathe() = println("Yo, I'm totally breathing") // uncomment to see error
+    def speak() = println("Yowl")
+  
+  val c = new Cat
+  c.speak()
+
+  // If you want to make a method private to the current class and also allow subclasses to 
+  // call it or override it, mark the method as protected, as shown with the speak method
+  class Animal2:
+    private def breathe() = println("I’m breathing")
+    def walk() =
+      breathe()
+      println("I’m walking")
+    protected def speak() = println("Hello?")
+
+  class Cat2 extends Animal2:
+    override def speak() = println("Meow")
+
+  val cat = new Cat2
+  cat.walk()
+  cat.speak()
+  // cat.breathe()   // won’t compile because it’s private uncomment to see error
+
+  /* 
+  The protected setting means:
+  - The method (or field) can be accessed by other instances of the same class
+  - It is not visible by other code in the current package
+  - It is available to subclasses
+  */
+
+  // Objects can contain methods
+  object StringUtils:
+    /**
+     * Returns a string that is the same as the input string, but
+     * truncated to the specified length.
+     */
+    def truncate(s: String, length: Int): String = s.take(length)
+    /**
+      * Returns true if the string contains only letters and numbers.
+      */
+    def lettersAndNumbersOnly_?(s: String): Boolean =
+      s.matches("[a-zA-Z0-9]+")
+    /**
+     * Returns true if the given string contains any whitespace
+     * at all. Assumes that `s` is not null.
+     */
+    def containsWhitespace(s: String): Boolean =
+      s.matches(".*\\s.*")
+  end StringUtils
+
+  // Extension methods
+  case class Circle(x: Double, y: Double, radius: Double)
+  /* 
+  There are many situations where you would like to add functionality to closed classes. 
+  For example, imagine that you have a Circle class as above, but you can’t change its source code. 
+  It could be defined like this in a third-party library
+   */
+
+  // When you want to add methods to this class, you can define them as extension methods, like this
+  extension (c: Circle)
+    def circumference: Double = c.radius * math.Pi * 2
+    def diameter: Double = c.radius * 2
+    def area: Double = math.Pi * c.radius * c.radius
+
+  // Usage
+  val myCircle = Circle(0,0,5) // Create a Circle with a radius of 5
+
+  // Calculate and print the properties of the Circle
+  println(s"The circumference of the circle is: ${myCircle.circumference}")
+  println(s"The diameter of the circle is: ${myCircle.diameter}")
+  println(s"The area of the circle is: ${myCircle.area}")
+
+  
+  
+  
+  
+  
