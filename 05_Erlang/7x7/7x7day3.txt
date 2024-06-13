@@ -1,0 +1,85 @@
+Day 3 - Experiments
+// Note: For Erlang examples given for the erl console (REPL) work as indicated in Seven Languages in Seven Weeks
+
+At command prompt type erl
+
+Erlang/OTP 26 [erts-14.2.3] [source] [64-bit] [smp:12:12] [ds:12:12:10] [async-threads:1] [jit:ns]
+
+Eshell V14.2.3 (press Ctrl+G to abort, type help(). for help)
+1> c(translate).
+{ok,translate}
+2> Pid = spawn(fun translate:loop/0).
+<0.92.0>
+3> Pid ! "casa".
+house
+"casa"
+4> Pid ! "blanca".
+white
+"blanca"
+5> Pid ! "loco".
+I don't understand.
+"loco"
+6> c(translate_service).
+{ok,translate_service}
+7> Translator = spawn(fun translate_service:loop/0).
+<0.102.0>
+8> translate_service:translate(Translator, "blanca").
+"white"
+9> translate_service:translate(Translator, "casa").
+"house"
+10> c(roulette).
+{ok,roulette}
+11> Gun = spawn(fun roulette:loop/0).
+<0.111.0>
+12> Gun ! 1.
+click
+1
+13> Gun ! 3.
+bang.
+3
+14> Gun ! 4.
+4
+15> Gun ! 1.
+1
+16> erlang:is_process_alive(Gun).
+false
+17> c(roulette).
+{ok,roulette}
+18> c(coroner).
+{ok,coroner}
+19> Revolver=spawn(fun roulette:loop/0).
+<0.128.0>
+20> Coroner=spawn(fun coroner:loop/0).
+<0.130.0>
+21> Coroner ! {monitor, Revolver}.
+Monitoring process.
+{monitor,<0.128.0>}
+22> Revolver ! 1.
+click
+1
+23> Revolver ! 3.
+bang.
+3
+The shooter <0.128.0> died with reason {roulette,die,at,{9,32,33}}.Start another one.
+24> c(doctor).
+{ok,doctor}
+25> Doc = spawn(fun doctor:loop/0).
+<0.140.0>
+26> revolver ! 1.                                             
+** exception error: bad argument
+     in operator  !/2
+        called as revolver ! 1
+27> Doc ! new.                                                
+Creating and monitoring process.
+new
+28> revolver ! 1.                                             
+click
+1
+29> revolver ! 3.                                             
+bang.
+3
+The shooter <0.144.0> died with reason {roulette,die,at,{9,37,7}}. Restarting.
+Creating and monitoring process.
+30> revolver ! 4.                                             
+click
+4

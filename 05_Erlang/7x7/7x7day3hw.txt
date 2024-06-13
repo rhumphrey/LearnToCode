@@ -1,0 +1,31 @@
+Day 3 - Self-Study (Homework)
+
+Find:
+- An OTP service that will restart a process if it dies
+  https://marketsplash.com/how-to-use-otp-behaviors-in-erlang/
+- Documentation for building a simple OTP server
+  https://beta.erlang.org/doc/system/design_principles.html
+  https://beta.erlang.org/doc/system/gen_server_concepts.html
+  
+
+Do:
+1. Monitor the translate_service and restart it should it die.
+2. Make the Doctor process restart itself if it should die.
+3. Make a monitor for the Doctor monitor. If either monitor dies, restart it.
+The following bonus questions will take a little bit of research to complete:
+4. Create a basic OTP server that logs messages to a file.
+5. Make the translate_service work across a network.
+
+
+1. Monitor the translate_service and restart it should it die.
+
+2. Make the Doctor process restart itself if it should die.
+
+3. Make a monitor for the Doctor monitor. If either monitor dies, restart it.
+
+
+The following bonus questions will take a little bit of research to complete:
+
+4. Create a basic OTP server that logs messages to a file.
+
+5. Make the translate_service work across a network.

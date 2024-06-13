@@ -1,0 +1,131 @@
+Day 2 - Experiments
+// Note: For Erlang examples given for the erl console (REPL) work as indicated in Seven Languages in Seven Weeks
+
+At command prompt type erl
+
+Erlang/OTP 26 [erts-14.2.3] [source] [64-bit] [smp:12:12] [ds:12:12:10] [async-threads:1] [jit:ns]
+
+Eshell V14.2.3 (press Ctrl+G to abort, type help(). for help)
+
+1> Animal = "dog".
+"dog"
+2> case Animal of
+   "dog" -> underdog;
+   "cat" -> thundercat
+   end.
+underdog
+3> case Animal of
+   "elephant" -> dumbo;
+   _ -> something_else
+   end.
+something_else
+4> X = 0.
+0
+5> if
+   X > 0 -> positive;
+   X < 0 -> negative
+   end.
+** exception error: no true branch found when evaluating an if expression
+6> if
+   X > 0 -> positive;
+   X < 0 -> negative;
+   true -> zero
+   end.
+zero
+7> Negate = fun(I) -> -I end.
+#Fun<erl_eval.42.105768164>
+8> Negate(1).
+-1
+9> Negate(-1).
+1
+10> Numbers = [1, 2, 3, 4].
+[1,2,3,4]
+11> lists:foreach(fun(Number) -> io:format("~p~n", [Number]) end, Numbers).
+1
+2
+3
+4
+ok
+12> Print = fun(X) -> io:format("~p~n", [X]) end.
+#Fun<erl_eval.42.105768164>
+13> lists:foreach(Print, Numbers).
+1
+2
+3
+4
+ok
+14> lists:map(fun(X) -> X + 1 end, Numbers).
+[2,3,4,5]
+15> Small = fun(X) -> X < 3 end.
+#Fun<erl_eval.42.105768164>
+16> Small(4).
+false
+17> Small(1).
+true
+18> lists:filter(Small, Numbers).
+[1,2]
+19> lists:all(Small, [0, 1, 2]).                              
+true
+20> lists:all(Small, [0, 1, 2, 3]).                           
+false
+21> lists:any(Small, [0, 1, 2, 3]).                           
+true
+22> lists:any(Small, [3, 4, 5]).                              
+false
+23> lists:any(Small, []).                                     
+false
+24> lists:all(Small, []).                                     
+true
+25> lists:takewhile(Small, Numbers).                          
+[1,2]
+26> lists:dropwhile(Small, Numbers).                          
+[3,4]
+27> lists:takewhile(Small, [1, 2, 1, 4, 1]).                  
+[1,2,1]
+28> lists:dropwhile(Small, [1, 2, 1, 4, 1]).                  
+[4,1]
+29> Numbers.                                                  
+[1,2,3,4]
+30> lists:foldl(fun(X, Sum) -> X + Sum end, 0, Numbers).      
+10
+31> Adder = fun(ListItem, SumSoFar) -> ListItem + SumSoFar end.                                                             
+#Fun<erl_eval.41.105768164>
+32> InitialSum = 0.                                           
+0
+33> lists:foldl(Adder, InitialSum, Numbers).                  
+10
+
+1> c(double).
+{ok,double}
+2> double:double_all([1, 2, 3]).
+[2,4,6]
+3> [1| [2, 3]].
+[1,2,3]
+4> [[2, 3] | 1].
+[[2,3]|1]
+5> [[] | [2, 3]].
+[[],2,3]
+6> [1 | []].
+[1]
+
+1> Fibs = [1, 1, 2, 3, 5].
+[1,1,2,3,5]
+2> Double = fun(X) -> X * 2 end.
+#Fun<erl_eval.42.105768164>
+3> lists:map(Double, Fibs).
+[2,2,4,6,10]
+4> [Double(X) || X <- Fibs].
+[2,2,4,6,10]
+5> [X * 2 || X <- [1, 1, 2, 3, 5]].
+[2,2,4,6,10]
+6> Cart = [{pencil, 4, 0.25}, {pen, 1, 1.20}, {paper, 2, 0.20}].
+[{pencil,4,0.25},{pen,1,1.2},{paper,2,0.2}]
+7> WithTax = [{Product, Quantity, Price, Price * Quantity * 0.08} ||
+   {Product, Quantity, Price} <- Cart].
+[{pencil,4,0.25,0.08},{pen,1,1.2,0.096},{paper,2,0.2,0.032}]  
+8> Cat = [{Product, Price} || {Product, _, Price} <- Cart].   
+[{pencil,0.25},{pen,1.2},{paper,0.2}]
+9> DiscountedCat = [{Product, Price / 2} || {Product, Price} <- Cat].
+[{pencil,0.125},{pen,0.6},{paper,0.1}]
+10> [{X, Y} || X <- [1, 2, 3, 4], X < 3, Y <- [5, 6]].        
+[{1,5},{1,6},{2,5},{2,6}]
