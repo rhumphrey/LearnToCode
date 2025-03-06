@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gemini API Example (No Error Checking)</title>
+</head>
+<body>
+    <button onclick="callGeminiAPI()">Call Gemini API</button>
+    <pre id="responseOutput"></pre>
+
+    <script>
+        function callGeminiAPI() {
+            const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY_HERE"; // Replace with your API key!
+            const MODEL = "gemini-2.0-flash-exp";
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+
+            const headers = {
+                "Content-Type": "application/json"
+            };
+
+            const data = {
+                "contents": [
+                    {
+                        "parts": [{ "text": "Explain how AI works" }]
+                    }
+                ]
+            };
+
+            fetch(url, {
+                method: "POST",
+                headers: headers,
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(jsonData => {
+                document.getElementById("responseOutput").textContent = JSON.stringify(jsonData, null, 2);
+            });
+            //No catch block, and no response.ok check.
+        }
+    </script>
+</body>
+</html>

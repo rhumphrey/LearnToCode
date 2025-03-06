@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gemini API Example</title>
+</head>
+<body>
+    <button onclick="callGeminiAPI()">Call Gemini API</button>
+    <pre id="responseOutput"></pre>
+
+    <script>
+        /**
+         * Function to call the Gemini API and display the response.
+         */
+        function callGeminiAPI() {
+            // Replace with your actual Gemini API key. **Never** expose your API key in client-side code in a production environment.
+            const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY_HERE";
+            const MODEL = "gemini-2.0-flash-exp";
+
+            // Construct the API URL using template literals for string interpolation.
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+
+            // Define the request headers.
+            const headers = {
+                "Content-Type": "application/json"
+            };
+
+            // Define the request data (payload) as a JavaScript object.
+            const data = {
+                "contents": [
+                    {
+                        "parts": [{ "text": "Explain how AI works" }] // The prompt for the Gemini model.
+                    }
+                ]
+            };
+
+            // Use the fetch API to send a POST request to the Gemini API.
+            fetch(url, {
+                method: "POST",
+                headers: headers,
+                body: JSON.stringify(data) // Convert the JavaScript object to a JSON string.
+            })
+            .then(response => {
+                // Check if the response was successful (status code 2xx).
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`); // Throw an error for non-successful responses.
+                }
+                return response.json(); // Parse the JSON response.
+            })
+            .then(jsonData => {
+                // Display the formatted JSON response in the <pre> element.
+                document.getElementById("responseOutput").textContent = JSON.stringify(jsonData, null, 2);
+            })
+            .catch(error => {
+                // Display an error message if the API call fails.
+                document.getElementById("responseOutput").textContent = "Error: " + error.message;
+            });
+        }
+    </script>
+</body>
+</html>

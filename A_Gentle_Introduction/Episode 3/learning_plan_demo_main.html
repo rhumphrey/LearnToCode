@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>30-Day Learning Plan</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Request a 40-minute x 30-Day Learning Plan</h1>
+
+    <div id="input-container">
+        <label id="learning-input-label" for="learning-input">Enter the subject you want to learn (e.g., the Python programming language, Death Metal Albums, Tuxedo Cats, ...):</label><br>
+        <div id="image-container">
+            <img src="servitor.png" alt="mav Image">
+        </div>
+        <input type="text" id="learning-input" placeholder="Enter a subject here..." /><br />
+        <button onclick="generateAndSendPlan()">Generate Learning Plan</button>
+    </div>
+
+    <div id="direct-input-container">
+        <label id="direct-input-label" for="direct-input">Alternatively - Enter a direct prompt:</label><br>
+        <div id="image-container">
+            <img src="servitor.png" alt="mav Image">
+        </div>
+        <input type="text" id="direct-input" placeholder="Enter a direct prompt here..." /><br />
+        <button onclick="sendDirectPrompt()">Send Direct Prompt</button>
+    </div>
+
+    <div id="response">Your 30-day learning plan or direct response will appear here.</div>
+
+    <div id="prompt-display"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

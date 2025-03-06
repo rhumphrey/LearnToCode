@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>30-Day Learning Plan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            color: #444;
+        }
+        #input-container, #direct-input-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #response {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            white-space: pre-wrap; /* Preserve newlines */
+        }
+        h2 {
+            font-size: 18px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        pre {
+            background-color: #f8f8f8;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        #prompt-display {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e8f0fe;
+            border: 1px solid #b3d7ff;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        #image-container {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+        #image-container img{
+            max-height: 30px;
+            height: auto;
+            vertical-align: middle;
+        }
+        #learning-input-label, #direct-input-label {
+            display: inline-block;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <h1>Request a 40-minute x 30-Day Learning Plan</h1>
+
+    <div id="input-container">
+        <label id="learning-input-label" for="learning-input">Enter the subject you want to learn (e.g., the Python programming language, Death Metal Albums, Tuxedo Cats, ...):</label><br>
+        <div id="image-container">
+            <img src="servitor.png" alt="mav Image">
+        </div>
+        <input type="text" id="learning-input" placeholder="Enter a subject here..." /><br />
+        <button onclick="generateAndSendPlan()">Generate Learning Plan</button>
+    </div>
+
+    <div id="direct-input-container">
+        <label id="direct-input-label" for="direct-input">Alternatively - Enter a direct prompt:</label><br>
+        <div id="image-container">
+            <img src="servitor.png" alt="mav Image">
+        </div>
+        <input type="text" id="direct-input" placeholder="Enter a direct prompt here..." /><br />
+        <button onclick="sendDirectPrompt()">Send Direct Prompt</button>
+    </div>
+
+    <div id="response">Your 30-day learning plan or direct response will appear here.</div>
+
+    <div id="prompt-display"></div>
+
+    <script>
+        async function generateAndSendPlan() {
+            const subject = document.getElementById("learning-input").value.trim();
+
+            if (!subject) {
+                alert("Please enter a subject.");
+                return;
+            }
+
+            const plan = `I am eager to learn about ${subject} from scratch. I have 30 days and can dedicate 40 minutes each day to deliberate learning. Can you create a comprehensive 30-day learning plan for me to master the fundamentals and get hands-on practice with ${subject}? (for programming languages do not include code)`;
+
+            document.getElementById("response").innerHTML = "";
+            document.getElementById("prompt-display").textContent = "Prompt sent to LLM:\n\n" + plan;
+
+            await sendRequest(plan);
+        }
+
+        async function sendDirectPrompt() {
+                const prompt = document.getElementById("direct-input").value.trim();
+
+                if (!prompt) {
+                    alert("Please enter a direct prompt.");
+                    return;
+                }
+
+                document.getElementById("response").innerHTML = "";
+                document.getElementById("prompt-display").textContent = "Prompt sent to LLM:\n\n" + prompt;
+
+                await sendRequest(prompt);
+        }
+
+        async function sendRequest(prompt) {
+            const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY_HERE"; // Replace with your API key
+            const MODEL = "gemini-2.0-flash-exp";
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+            const headers = { "Content-Type": "application/json" };
+            const data = { contents: [{ parts: [{ text: prompt }] }] };
+
+            try {
+                const response = await fetch(url, {
+                    method: "POST",
+                    headers: headers,
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const json = await response.json();
+                const textContent = json.candidates[0].content.parts[0].text;
+
+                document.getElementById("response").textContent = textContent; // Directly set the response text
+            } catch (error) {
+                document.getElementById("response").textContent = `Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>
