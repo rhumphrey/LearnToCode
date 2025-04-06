@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Job Description => Study Plan Generator</title>
+<style>
+/* Basic styling for the page elements */
+body {
+    font-family: sans-serif;        /* Sets the font for the entire body */
+    margin: 20px;                   /* Adds margin around the body content */
+}
+
+h1 {
+    text-align: center;             /* Centers the main heading text */
+}
+
+textarea {
+    width: 95%;                     /* Makes the textarea almost full width of its container */
+    padding: 10px;                  /* Adds padding inside the textarea */
+    margin-bottom: 10px;            /* Adds space below the textarea */
+    border: 1px solid #ccc;       /* Adds a light grey border */
+    font-size: 16px;                /* Sets the font size for the textarea text */
+    min-height: 100px;              /* Sets a minimum height so it doesn't collapse when empty */
+}
+button {
+    padding: 10px 20px;             /* Sets padding inside the buttons */
+    background-color: #007bff;    /* Sets a blue background color */
+    color: white;                 /* Sets text color to white */
+    border: none;                   /* Removes default button border */
+    cursor: pointer;                /* Changes cursor to pointer on hover to indicate interactivity */
+    font-size: 16px;                /* Sets font size for button text */
+}
+button:hover {
+    background-color: #0056b3;    /* Darker blue on hover for visual feedback */
+}
+#apiResponse {
+    margin-top: 20px;               /* Adds space above the response area */
+    padding: 15px;                  /* Adds padding inside the response area */
+    border: 1px solid #ddd;       /* Adds a light grey border */
+    background-color: #f9f9f9;    /* Sets a very light grey background color */
+    white-space: pre-wrap;          /* Preserves line breaks and spacing from the API response */
+    font-size: 16px;                /* Sets font size for the response text */
+}
+.error {
+    color: red;                   /* Styles error messages in red */
+    margin-top: 10px;               /* Adds space above error messages */
+}
+</style>
+</head>
+<body>
+    <h1>Job Description => Study Plan Generator</h1>
+
+    <!-- Textarea for user to paste the job description -->
+    <textarea id="jobDescription" placeholder="Paste Job Description here..."></textarea><br>
+    <!-- Button to trigger the study plan generation -->
+    <button onclick="generateStudyPlan()">Generate Study Plan</button>
+
+    <!-- Div to display the API response (the generated study plan) -->
+    <div id="apiResponse"></div>
+    <!-- Div to display error messages, initially hidden -->
+    <div id="errorMessage" class="error" style="display:none;"></div>
+    <!-- Button to download the generated study plan, initially hidden -->
+    <button id="downloadButton" style="display:none;" onclick="downloadResponse()">Download Study Plan</button>
+
+    <script>
+        // ** IMPORTANT: Replace with your actual API key from Google AI Studio **
+        // Get your API key from: https://aistudio.google.com/app/apikey
+
+        // ** !!! PRODUCTION WARNING !!! **
+        // ** NEVER hardcode API keys directly in your JavaScript code in a production environment! **
+        // ** This is a security risk as API keys can be exposed in client-side code. **
+        // ** For production, use environment variables, backend proxies, or secure vault mechanisms. **
+        document.write('<br>');
+        document.write('<div class="api-key-warning">');
+        document.write('<strong>SECURITY WARNING: API Key Hardcoded!</strong>');
+        document.write('<br>');
+        document.write('For production, DO NOT hardcode your API key in JavaScript.');
+        document.write('<br>');
+        document.write('Use environment variables or a backend proxy to securely handle your API key.');
+        document.write('</div>');
+
+
+        const GEMINI_API_KEY = "PASTE YOUR API KEY HERE"; // **PASTE YOUR API KEY HERE**  <-- FOR TESTING - BUT NOT FOR PRODUCTION!
+        const MODEL = "gemini-2.0-flash-thinking-exp-01-21"; // Specifies the Gemini model to use
+        const BASE_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${GEMINI_API_KEY}`; // Base URL for the Gemini API endpoint
+        const HEADERS = { "Content-Type": "application/json" }; // Headers for the API request, specifying JSON content
+        let responseTextForDownload = ""; // Variable to store the API response text for download functionality
+
+        // Asynchronous function to generate the study plan using the Gemini API
+        async function generateStudyPlan() {
+            // Get references to HTML elements
+            const jobDescription = document.getElementById("jobDescription").value; // Get the job description text from the textarea
+            const apiResponseDiv = document.getElementById("apiResponse"); // Get the div to display the API response
+            const errorMessageDiv = document.getElementById("errorMessage"); // Get the div to display error messages
+            const downloadButton = document.getElementById("downloadButton"); // Get the download button
+
+            downloadButton.style.display = 'none'; // Initially hide the download button for each new request
+            responseTextForDownload = ""; // Clear any previous response text
+
+            // Input validation: Check if the job description is empty
+            if (!jobDescription.trim()) {
+                errorMessageDiv.textContent = "Please enter a Job Description."; // Display error message
+                errorMessageDiv.style.display = "block"; // Make the error message div visible
+                apiResponseDiv.textContent = ""; // Clear any previous API response
+                return; // Exit the function if input is invalid
+            }
+
+            errorMessageDiv.style.display = "none"; // Hide any previous error messages
+            apiResponseDiv.textContent = "Generating study plan... Please wait."; // Display a loading message
+
+            // Construct the prompt for the Gemini API
+            const promptText = `Can you take a look at the following Job Description and give me your opinion on the complexity of the Job.
+
+${jobDescription}
+
+Assuming I could dedicate one year of self-directed study, dedicating 40 hours a week for 50 weeks, to bring myself up to the level of expertise required for a job like this.
+What would a 50 week study plan, with deliverables, for this self directed study look like?
+
+Do you have any additional advice to consider related to the self-study plan, tasks and deliverables, you have drawn up?`;
+
+            // Define the payload to send to the Gemini API
+            const payload = {
+                contents: [{
+                    parts: [{ text: promptText }] // The prompt text is the content of the request
+                }]
+            };
+
+            try {
+                // Send a POST request to the Gemini API
+                const response = await fetch(BASE_URL, {
+                    method: "POST", // Use POST method to send data to the API
+                    headers: HEADERS, // Include headers for JSON content
+                    body: JSON.stringify(payload) // Serialize the payload object to JSON format
+                });
+
+                // Check if the response was successful (HTTP status code 2xx)
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`); // If not successful, throw an error
+                }
+
+                // Parse the JSON response from the API
+                const data = await response.json();
+                console.log("API Response:", data); // Log the full API response to the console for debugging
+
+                // Extract the response text from the API response data
+                if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text) {
+                    responseTextForDownload = data.candidates[0].content.parts[0].text; // Store the response text for download
+                    apiResponseDiv.textContent = responseTextForDownload; // Display the response text in the apiResponseDiv
+                    downloadButton.style.display = 'block'; // Show the download button after successfully displaying the response
+                } else {
+                    // Handle cases where the API response is not in the expected format
+                    apiResponseDiv.textContent = "Error: Could not extract meaningful response from the API."; // Display a generic error message
+                    errorMessageDiv.textContent = "API response format unexpected. Check console for full response."; // Display a more detailed error message in the error div
+                    errorMessageDiv.style.display = "block"; // Make the error message div visible
+                    downloadButton.style.display = 'none'; // Hide the download button if there's an error
+                }
+
+            } catch (error) {
+                // Handle errors that occur during the API request
+                console.error("API Error:", error); // Log the error to the console
+                apiResponseDiv.textContent = "Error generating study plan."; // Display a general error message to the user
+                errorMessageDiv.textContent = `API request failed: ${error.message}. Please check your API key and internet connection.`; // Display a more specific error message
+                errorMessageDiv.style.display = "block"; // Make the error message div visible
+                downloadButton.style.display = 'none'; // Hide the download button in case of an error
+            }
+        }
+
+        // Function to handle the download of the response text
+        function downloadResponse() {
+            // Check if there is response text to download
+            if (!responseTextForDownload) {
+                alert("No response text available to download."); // Alert the user if there is no response text
+                return; // Exit the function
+            }
+
+            // Create a filename for the downloaded file based on the job description
+            const filenameBase = document.getElementById("jobDescription").value.trim().substring(0, 20).replace(/[^a-zA-Z0-9]/g, '_') || "StudyPlan"; // Take the first 20 chars of job description, replace invalid chars with '_', or default to "StudyPlan"
+            const filename = filenameBase + ".md"; // Append '.md' extension for Markdown format
+
+            // Create a Blob (Binary Large Object) with the response text as content and Markdown MIME type
+            const blob = new Blob([responseTextForDownload], { type: 'text/markdown' });
+            // Create a URL for the Blob object
+            const url = URL.createObjectURL(blob);
+
+            // Create a temporary anchor element for triggering the download
+            const a = document.createElement('a');
+            a.href = url; // Set the href to the Blob URL
+            a.download = filename; // Set the download attribute with the filename
+            document.body.appendChild(a); // Append the anchor to the body (it's not visible)
+            a.click(); // Programmatically click the anchor to start download
+            document.body.removeChild(a); // Remove the anchor from the body after download starts
+            URL.revokeObjectURL(url); // Release the URL object to free up resources
+        }
+    </script>
+
+</body>
+</html>
