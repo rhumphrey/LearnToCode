@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Gemini Text Request</title>
+<style>
+/* Basic styling for the page elements (simplified) */
+body {
+    font-family: sans-serif;
+    margin: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+textarea, button, input, select, label { /* Include input, select, label in styling */
+    width: 95%; /* Default width */
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    box-sizing: border-box; /* To include padding and border in width */
+}
+
+textarea {
+    min-height: 200px; /* Increased height for input textarea */
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#geminiResponse {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    white-space: pre-wrap;
+    font-size: 16px;
+    min-height: 200px; /* Increased height for response display */
+}
+
+.error {
+    color: red;
+    margin-top: 10px;
+}
+
+.loading-button {
+    cursor: wait; /* Indicate loading */
+}
+
+.loading-button::after {
+    content: ' (Loading...)'; /* Indicate loading text */
+}
+
+.control-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.control-row label {
+    width: auto; /* Label width adjusts to content */
+    margin-right: 10px;
+    margin-bottom: 0; /* Reset margin-bottom for label in control-row */
+}
+
+.control-row input[type="range"],
+.control-row input[type="number"],
+.control-row select {
+    width: calc(95% - auto - 10px); /* Adjust input width to fill remaining space */
+}
+
+.slider-input-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: calc(95% - auto - 10px); /* Adjust width for group */
+}
+
+.slider-input-group input[type="range"] {
+    width: 70%; /* Slider takes up most space */
+    margin-right: 10px;
+}
+
+.slider-input-group input[type="number"] {
+    width: 30%; /* Number input takes less space */
+}
+
+
+</style>
+</head>
+<body>
+    <h1>Ask Gemini</h1>
+
+    <div class="control-row">
+        <label for="temperatureSlider">Temperature (0-2):</label>
+        <div class="slider-input-group">
+            <input type="range" id="temperatureSlider" min="0" max="2" step="0.01" value="0.7">
+            <input type="number" id="temperatureNumber" min="0" max="2" step="0.01" value="0.7" style="width: 70px;">
+        </div>
+    </div>
+
+    <div class="control-row">
+        <label for="top_pSlider">Top P (0-1):</label>
+        <div class="slider-input-group">
+            <input type="range" id="top_pSlider" min="0" max="1" step="0.01" value="0.95">
+            <input type="number" id="top_pNumber" min="0" max="1" step="0.01" value="0.95" style="width: 70px;">
+        </div>
+    </div>
+
+    <div class="control-row">
+        <label for="top_kNumber">Top K (Integer, e.g., 1):</label>
+        <input type="number" id="top_kNumber" min="1" value="1">
+    </div>
+
+    <div class="control-row">
+        <label for="modelRole">Model Role/Context (Optional):</label>
+        <textarea id="modelRole" placeholder="e.g., 'You are a helpful assistant who...'" style="min-height: 50px;"></textarea>
+    </div>
+
+
+    <div>
+        <label for="promptInput">Your Request:</label>
+        <textarea id="promptInput" placeholder="Enter your request for Gemini here..."></textarea>
+    </div>
+
+    <div>
+        <label for="optionalInstructions">Optional Instructions:</label>
+        <textarea id="optionalInstructions" placeholder="Add any specific instructions after your main request (e.g., 'Format the response as a list', 'Keep the answer concise')." style="min-height: 50px;"></textarea>
+    </div>
+
+    <button id="askButton" onclick="askGemini()">Ask Gemini</button>
+
+    <h2>Gemini Response:</h2>
+    <div id="geminiResponse"></div>
+
+    <div id="errorMessage" class="error" style="display:none;"></div>
+
+    <button id="downloadResponseButton" style="display:none;" onclick="downloadGeminiResponse()">Download Response (MD)</button>
+
+    <script>
+        // ** IMPORTANT: Replace with your actual API key from Google AI Studio **
+        // Get your API key from: https://aistudio.google.com/app/apikey
+
+        // ** !!! PRODUCTION WARNING !!! **
+        // ** NEVER hardcode API keys directly in your JavaScript code in a production environment! **
+        // ** This is a security risk as API keys can be exposed in client-side code. **
+        // ** For production, use environment variables, backend proxies, or secure vault mechanisms. **
+        document.write('<div class="api-key-warning">');
+        document.write('<br>');
+        document.write('<strong>SECURITY WARNING: API Key Hardcoded!</strong>');
+        document.write('<br>');
+        document.write('For production, DO NOT hardcode your API key in JavaScript.');
+        document.write('<br>');
+        document.write('Use environment variables or a backend proxy to securely handle your API key.');
+        document.write('</div>');
+
+
+        const GEMINI_API_KEY = "AIzaSyD8XbbhVa3tr_PcwCCTNA4uu2snRATU1jo"; // **PASTE YOUR API KEY HERE** <-- FOR TESTING - BUT NOT FOR PRODUCTION!
+        const MODEL = "gemini-2.0-flash-thinking-exp-01-21"; // Specifies the Gemini model to use
+        const BASE_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${GEMINI_API_KEY}`; // Base URL for the Gemini API endpoint
+        const HEADERS = { "Content-Type": "application/json" }; // Headers for the API request, specifying JSON content
+        let geminiResponseTextForDownload = ""; // Variable to store the Gemini response text for download
+        let userSettings = {}; // Object to store user settings
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Temperature Slider and Number Input Sync
+            const temperatureSlider = document.getElementById('temperatureSlider');
+            const temperatureNumber = document.getElementById('temperatureNumber');
+            const top_pSlider = document.getElementById('top_pSlider');
+            const top_pNumber = document.getElementById('top_pNumber');
+
+            function syncSliderAndNumber(slider, number) {
+                slider.addEventListener('input', function() {
+                    number.value = slider.value;
+                });
+
+                number.addEventListener('input', function() {
+                    let value = parseFloat(number.value);
+                    if (isNaN(value)) {
+                        value = parseFloat(slider.defaultValue); // Revert to default if NaN
+                    } else {
+                        const min = parseFloat(slider.min);
+                        const max = parseFloat(slider.max);
+                        value = Math.min(max, Math.max(min, value)); // Clamp between min and max
+                    }
+                    number.value = value.toFixed(2); // Format to 2 decimal places
+                    slider.value = value.toFixed(2);
+                });
+            }
+
+            syncSliderAndNumber(temperatureSlider, temperatureNumber);
+            syncSliderAndNumber(top_pSlider, top_pNumber);
+        });
+
+
+        async function askGemini() {
+            const promptInput = document.getElementById("promptInput").value;
+            const optionalInstructions = document.getElementById("optionalInstructions").value;
+            const geminiResponseDiv = document.getElementById("geminiResponse");
+            const errorMessageDiv = document.getElementById("errorMessage");
+            const askButton = document.getElementById("askButton");
+            const downloadResponseButton = document.getElementById("downloadResponseButton");
+            const temperature = parseFloat(document.getElementById("temperatureSlider").value);
+            const top_p = parseFloat(document.getElementById("top_pSlider").value);
+            const top_k = parseInt(document.getElementById("top_kNumber").value, 10); // Parse as integer
+            const modelRole = document.getElementById("modelRole").value;
+
+
+            // Store user settings
+            userSettings = {
+                temperature: temperature,
+                top_p: top_p,
+                top_k: top_k,
+                modelRole: modelRole,
+                promptInput: promptInput,
+                optionalInstructions: optionalInstructions
+            };
+
+
+            downloadResponseButton.style.display = 'none'; // Hide download button initially
+            geminiResponseDiv.textContent = ""; // Clear previous response
+            askButton.classList.add('loading-button'); // Add loading class
+
+            if (!promptInput.trim()) {
+                errorMessageDiv.textContent = "Please enter a request for Gemini.";
+                errorMessageDiv.style.display = "block";
+                askButton.classList.remove('loading-button');
+                return;
+            }
+
+            errorMessageDiv.style.display = "none";
+            geminiResponseDiv.textContent = "Loading response... Please wait.";
+
+            let fullPromptText = promptInput;
+            if (modelRole.trim()) {
+                fullPromptText = `${modelRole.trim()}\n\n${promptInput}`; // Prepend role/context to the prompt
+            }
+
+            if (optionalInstructions.trim()) {
+                fullPromptText = `${fullPromptText}\n\n${optionalInstructions}`; // Append optional instructions
+            }
+
+
+            const promptText = fullPromptText;
+
+            const generationConfig = { // Create generationConfig object
+                temperature: temperature,
+                top_p: top_p,
+                top_k: top_k
+            };
+
+
+            const payload = {
+                contents: [{
+                    parts: [{ text: promptText }]
+                }],
+                generationConfig: generationConfig // Use the generationConfig object
+            };
+
+            try {
+                const response = await fetch(BASE_URL, {
+                    method: "POST",
+                    headers: HEADERS,
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log("Gemini API Response:", data);
+
+                if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text) {
+                    const responseText = data.candidates[0].content.parts[0].text;
+                    geminiResponseTextForDownload = responseText; // Store for download
+                    geminiResponseDiv.textContent = responseText;
+                    downloadResponseButton.style.display = 'block'; // Show download button
+                } else {
+                    geminiResponseDiv.textContent = "Error: Could not extract response from API.";
+                    errorMessageDiv.textContent = "API response format unexpected. Check console for full response.";
+                    errorMessageDiv.style.display = "block";
+                    downloadResponseButton.style.display = 'none';
+                }
+
+            } catch (error) {
+                console.error("API Error:", error);
+                geminiResponseDiv.textContent = "Error fetching response.";
+                errorMessageDiv.textContent = `Failed to get response: ${error.message}. Please check your API key and internet connection, and parameter ranges.`;
+                errorMessageDiv.style.display = "block";
+                downloadResponseButton.style.display = 'none';
+            } finally {
+                askButton.classList.remove('loading-button'); // Remove loading class
+            }
+        }
+
+        function downloadGeminiResponse() {
+            if (!geminiResponseTextForDownload) {
+                alert("No Gemini response available to download.");
+                return;
+            }
+
+            // Build the markdown content
+            let markdownContent = "---\n";
+            markdownContent += "## Gemini Request Settings\n";
+            markdownContent += `**Temperature:** ${userSettings.temperature}\n`;
+            markdownContent += `**Top P:** ${userSettings.top_p}\n`;
+            markdownContent += `**Top K:** ${userSettings.top_k}\n`;
+            markdownContent += `**Model Role/Context:**\n${userSettings.modelRole ? '> ' + userSettings.modelRole.split('\n').join('\n> ') + '\n' : 'N/A\n'}`; // Format for blockquote
+            markdownContent += `**Prompt Input:**\n${userSettings.promptInput ? '> ' + userSettings.promptInput.split('\n').join('\n> ') + '\n' : 'N/A\n'}`; // Format for blockquote
+            markdownContent += `**Optional Instructions:**\n${userSettings.optionalInstructions ? '> ' + userSettings.optionalInstructions.split('\n').join('\n> ') + '\n' : 'N/A\n'}`; // Format for blockquote
+            markdownContent += "---\n\n";
+            markdownContent += "## Gemini Response\n";
+            markdownContent += geminiResponseTextForDownload;
+
+
+            const now = new Date();
+            const timestamp = now.toISOString().replace(/[-:]/g, '').slice(0, 15); // Format: YYYYMMDDTHHMMSS
+            const filename = `gemini_response_${timestamp}.md`;
+            const blob = new Blob([markdownContent], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+
+</body>
+</html>
