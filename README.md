@@ -14,6 +14,8 @@ A_Gentle_Introduction - Various source code and associated files for my 'A Gentl
 
 Experiments_in_AI - Various source code and associated files for my 'Experiments in AI' series
 
+Tiny_Experiments - Various source code and associated files for my 'Tiny Experiments' series
+
 Seven in Seven - Languages.docx - List of the Programming Languages covered in the 7 in 7 weeks books on Programming Languages
 
 Stack Overflow - Programming Languages.xls - Analysis for the Top Paying and Most Popular Programming Languages statistics from the Stack Overflow Developers Survey
