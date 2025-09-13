@@ -1,0 +1,36 @@
+v                Random Maze Generator
+>0"y eht htiw gnivom trats ,ecneh eht morf"48*,v
+v                                            ,"ecneidua ruoy rof ezam a etareneg"
+>0"!elbisserpxeni dna gnitanicaf si efil"48*,v
+v                                           ,"!seicnatsmucric rednu lla"
+>25*:00p10p20p30p40p                       v
+v                                          <
+>00g:2%\2/:10g+:69*`#v_:20g+:69*`#v_30g+v
+v                    $              $    <
+>40g+69*+.32,1+:69*`!|              ^    <
+                    @|              ^    <
+v                   <               ^    <
+>:#,_@                              ^    <
+^                                   ^    <
+v    Random number generator using  ^    <
+>:3%1-!#v_:4%1-!#v_:5%1-!#v_       ^    <
+        2         3         4       ^    <
+        *         *         *       ^    <
+        1         1         1       ^    <
+        +         +         +       ^    <
+        :         :         :       ^    <
+        3         4         5       ^    <
+        %         %         %       ^    <
+        !         !         !       ^    <
+        #         #         #       ^    <
+        v         v         v       ^    <
+        _         _         _       ^    <
+        5         7         11      ^    <
+        *         *         *       ^    <
+        1         1         1       ^    <
+        +         +         +       ^    <
+        >         >         >       v    <
+v                                   <    <
+>:19*%2*32+,1+:19*`!|                    <
+                   @|                    <
+^                  <

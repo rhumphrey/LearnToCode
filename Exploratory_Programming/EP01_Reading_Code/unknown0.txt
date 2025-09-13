@@ -1,0 +1,14 @@
+fibonacci_sequence(0, []) :- !.
+fibonacci_sequence(1, [0]) :- !.
+
+fibonacci_sequence(N, Sequence) :-
+    N >= 2,
+    Sequence = [0, 1 | Rest],
+    Count is N - 2,
+    fib_helper(Count, 1, 0, Rest).
+
+fib_helper(0, _, _, []).
+fib_helper(Count, A, B, [C | Rest]) :-
+    C is A + B,
+    NextCount is Count - 1,
+    fib_helper(NextCount, C, A, Rest).

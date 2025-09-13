@@ -1,0 +1,54 @@
+open System
+
+type Complex = { Real: float; Imag: float }
+
+let (+) c1 c2 = { Real = c1.Real + c2.Real; Imag = c1.Imag + c2.Imag }
+let (*) c1 c2 = 
+    { Real = c1.Real * c2.Real - c1.Imag * c2.Imag
+      Imag = c1.Real * c2.Imag + c1.Imag * c2.Real }
+
+let magnitude c = sqrt (c.Real * c.Real + c.Imag * c.Imag)
+
+let mandelbrot c maxIter =
+    let rec iterate z n =
+        if n >= maxIter then maxIter
+        elif magnitude z > 2.0 then n
+        else iterate (z * z + c) (n + 1)
+    iterate { Real = 0.0; Imag = 0.0 } 0
+
+let mapToComplex width height x y =
+    { Real = -2.5 + 3.5 * float x / float width
+      Imag = -1.25 + 2.5 * float y / float height }
+
+let iterationToChar iterations maxIter =
+    let chars = " .:-=+*#%@"
+    let index = min 9 (iterations * 10 / maxIter)
+    chars.[index]
+
+let generateMandelbrot width height maxIter =
+    [0..height-1]
+    |> List.map (fun y ->
+        [0..width-1]
+        |> List.map (fun x ->
+            let c = mapToComplex width height x y
+            let iterations = mandelbrot c maxIter
+            iterationToChar iterations maxIter)
+        |> List.toArray
+        |> String)
+
+let printMandelbrot () =
+    let width, height, maxIter = 80, 40, 100
+    generateMandelbrot width height maxIter
+    |> List.iter (printfn "%s")
+
+let measureTime f =
+    let sw = System.Diagnostics.Stopwatch.StartNew()
+    f ()
+    sw.Stop()
+    printfn "\nGenerated in %dms" sw.ElapsedMilliseconds
+
+[<EntryPoint>]
+let main argv =
+    Console.WriteLine("Mandelbrot Set:")
+    measureTime printMandelbrot
+    0

@@ -1,0 +1,44 @@
+USING: arrays kernel math math.complex sequences io formatting
+locals prettyprint math.ranges ;
+
+: julia-constant ( -- c ) C{ -0.7 0.27015 } ;
+
+: julia-iterate ( z c -- z' ) 
+    [ sq ] dip + ;
+
+: diverges? ( z -- ? )
+    abs 2 > ;
+
+: julia-escape-time ( z c max-iter -- n )
+    0 -rot
+    [ 2dup diverges? not ]
+    [ [ 1 + ] 2dip julia-iterate -rot ] while
+    2drop ;
+
+: screen->complex ( x y width height -- z )
+    [ 2 * swap / 1.5 - ] [ 2 * swap / 1.0 - ] 2bi* rect> ;
+
+: escape-time->char ( n max-iter -- char )
+    2dup = [ 2drop CHAR: * ] [
+        10 * swap / " .:-=+*#%@" nth
+    ] if ;
+
+: julia-row ( y width height max-iter -- string )
+    [ width [0,b) ] 2dip julia-constant
+    [ [ 2dup screen->complex ] 2dip julia-escape-time ] 2curry map
+    [ escape-time->char ] curry map >string ;
+
+: julia-set ( width height max-iter -- )
+    [ height [0,b) ] dip
+    [ julia-row ] 2curry map
+    [ print ] each ;
+
+: benchmark-julia ( -- )
+    millis
+    80 40 50 julia-set
+    millis swap - 
+    "Generated in %d milliseconds\n" printf ;
+
+: main ( -- )
+    "Julia Set Fractal:" print
+    benchmark-julia ;
