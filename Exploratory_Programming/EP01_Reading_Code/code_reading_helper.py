@@ -56,7 +56,7 @@ def detect_language_with_gemini(code, filename):
     
     try:
         print("Detecting programming language with Gemini...")
-        response = requests.post(GEMINI_API_ENDPOINT, headers=headers, json=request_payload, timeout=30)
+        response = requests.post(GEMINI_API_ENDPOINT, headers=headers, json=request_payload, timeout=240)
         response.raise_for_status()
         response_data = response.json()
         
@@ -201,7 +201,7 @@ def call_gemini_api(system_instruction, prompt):
     
     try:
         print("Sending analysis request to Gemini...")
-        response = requests.post(GEMINI_API_ENDPOINT, headers=headers, json=request_payload, timeout=120)
+        response = requests.post(GEMINI_API_ENDPOINT, headers=headers, json=request_payload, timeout=240)
         response.raise_for_status()
         return response.json()
     except Exception as e:
